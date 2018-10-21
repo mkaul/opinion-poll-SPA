@@ -24,7 +24,28 @@
     $raw_data = file_get_contents('php://input');
 
     // decode string into PHP array for security reasons
-    $json_data = json_decode( $raw_data, false, 512, JSON_UNESCAPED_UNICODE );
+    $json_data = json_decode( $raw_data, true, 512, JSON_UNESCAPED_UNICODE );
+
+    // add server data
+    if (!empty($_SERVER['HTTP_CLIENT_IP'])){
+        $ip=$_SERVER['HTTP_CLIENT_IP'];
+      }
+      elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){
+        $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+      }
+      else {
+        $ip=$_SERVER['REMOTE_ADDR'];
+      }
+
+    $json_data["IP"] = $ip;
+
+    // add server data
+    if ( isset( $_SERVER['HTTP_REFERER'] )){
+      $json_data["HTTP_REFERER"] = $_SERVER['HTTP_REFERER'];
+    }
+
+    // add server date
+    $json_data["server_date"] = date("Y-m-d H:i:s");
 
     // security: locate directory of log files outside of WWW folders
     // $dir = "../../logs/";
