@@ -105,8 +105,10 @@ start_button.addEventListener('click', async (e) => {
         // //   results.geolocation = position;
         // // });
 
+        results.client_time = new Date();
+
         // remove NaNs from results
-        const NaNs = Object.keys( results ).filter( key => isNaN( results[key] ) );
+        const NaNs = Object.keys( results ).filter( key => ! isNaN( results[key] ) );
         NaNs.forEach( key => delete results[key] );
 
         // log results
@@ -140,7 +142,7 @@ async function draw_results(){
   })).json();
 
   // remove NaNs from dataset
-  const NaNs = Object.keys( dataset ).filter( key => isNaN( dataset[key] ) );
+  const NaNs = Object.keys( dataset ).filter( key => ! isNaN( dataset[key] ) );
   NaNs.forEach( key => delete dataset[key] );
 
   // count_participants
