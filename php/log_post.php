@@ -27,19 +27,6 @@
     $json_data = json_decode( $raw_data, true, 512, JSON_UNESCAPED_UNICODE );
 
     // add server data
-    if (!empty($_SERVER['HTTP_CLIENT_IP'])){
-        $ip=$_SERVER['HTTP_CLIENT_IP'];
-      }
-      elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){
-        $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
-      }
-      else {
-        $ip=$_SERVER['REMOTE_ADDR'];
-      }
-
-    $json_data["IP"] = $ip;
-
-    // add server data
     if ( isset( $_SERVER['HTTP_REFERER'] )){
       $json_data["HTTP_REFERER"] = $_SERVER['HTTP_REFERER'];
     }
