@@ -1,6 +1,9 @@
 # Opinion-Poll-SPA
 **Single Page Application (SPA)** for taking an opinion survey, collect votes, calculate results and display them with **basic browser technology** following the "Use the platform" paradigm.
 
+## Preview
+[mkaul.github.io/opinion-poll-SPA/](https://mkaul.github.io/opinion-poll-SPA/)
+
 ## SPA as Survey Tool
 This SPA is used for a survey, to take the opinion poll, to calculate the results and to display them. All these functions are integrated into a single HTML page. No further tools are needed. Only a modern standard browser is necessary.
 
