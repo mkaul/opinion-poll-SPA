@@ -105,6 +105,10 @@ start_button.addEventListener('click', async (e) => {
         // //   results.geolocation = position;
         // // });
 
+        // remove NaNs from results
+        const NaNs = Object.keys( results ).filter( key => isNaN( results[key] ) );
+        NaNs.forEach( key => delete results[key] );
+
         // log results
         fetch(new Request('https://kaul.inf.h-brs.de/data/2018/prosem/log_post.php'), {
           method: 'POST',
@@ -135,7 +139,9 @@ async function draw_results(){
     cache: 'no-store'
   })).json();
 
-  // console.log( dataset );
+  // remove NaNs from dataset
+  const NaNs = Object.keys( dataset ).filter( key => isNaN( dataset[key] ) );
+  NaNs.forEach( key => delete dataset[key] );
 
   // count_participants
   const count_participants = dataset.length;
