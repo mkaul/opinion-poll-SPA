@@ -1,0 +1,244 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Projekt-Seminar (Web Engineering)">
+<link rel="shortcut icon" href="https://www.h-brs.de/favicon.ico" type="image/x-icon">
+<head>
+    <title id="title">Agile Werte</title>
+    <meta name="description" content="Umfrage zu Agilen Werten">
+    <!-- Schema.org markup for Google+ -->
+    <meta itemprop="name" content="Agile Werte" />
+    <meta itemprop="description" content="Umfrage zu Agilen Werten" />
+    <link rel="publisher" content="https://www.google.com/+mkaul" />
+    <!-- END Schema.org markup for Google+ -->
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" content="Agile_Werte" />
+    <meta name="twitter:site" content="@profkaul" />
+    <meta name="twitter:title" content="Umfrage zu Agilen Werten" />
+    <meta name="twitter:description" content="Umfrage zu Agilen Werten." />
+    <!-- END Twitter Card data -->
+    <!-- OG TAGS -->
+    <meta property="og:site_name" content="Agile_Werte" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Umfrage zu Agilen Werten" />
+    <meta property="og:description" content="Umfrage zu Agilen Werten." />
+    <meta property="og:image" content="img/banner-1200x627.png" />
+    <!-- END OG TAGS -->
+    <link rel="stylesheet" href="paper-agile.css" type="text/css">
+
+    <script src="https://ccmjs.github.io/mkaul-components/fast_poll/versions/ccm.fast_poll-2.0.0.js" async></script>
+    <script src="https://ccmjs.github.io/mkaul-components/plotly/versions/ccm.plotly-1.0.0.js" async></script>
+</head>
+<body>
+<img class="logo" src="img/h-brs-white.svg" width="85vw">
+<!-- https://www.h-brs.de/files/related/cd_leitfaden_hbrs_2014.pdf -->
+<div id="welcome">
+    <h1>Umfrage zum agilen Wertesystem</h1>
+    <p>Die Industrie ist heute zwiegespalten und setzt in Softwareprojekten zur Hälfte agile Methoden und zur anderen Hälfte herkömmliche Methoden ein (Wasserfall). Daher stellt sich die Frage nach der Ursache. Mit dieser Umfrage soll empirisch untersucht werden, ob dies am agilen Wertesystem liegt: Werden die agilen Werte von einer Mehrheit getragen? Überwiegt eine konventionelle oder eine agile Ethik?</p>
+    <button id="start">An der Umfrage teilnehmen!<sup>(*)</sup></button>
+    <p><sup>(*)</sup><em>Nach der Teilnahme erhalten Sie Zugriff auf die Auswertung der Umfrage.</em></p>
+</div>
+<div id="survey">
+    <h1>Umfrage zum agilen Wertesystem</h1>
+    <div id="ccm_poll"></div>
+</div>
+<div id="paper">
+<header class="paper">
+    <h1>Agile Werte</h1>
+    <h2>Eine empirische Studie</h2>
+    <p><em>Manfred Kaul</em>
+        <br>Hochschule Bonn-Rhein-Sieg
+        <br>Manfred.Kaul@h-brs.de
+    </p>
+</header>
+<article>
+    <section class="abstract">
+        <b>Abstract.</b> Die agile Bewegung begann mit dem <a target="_blank" href="http://agilemanifesto.org/iso/de/manifesto.html" rel="noopener">agilen Manifest</a> <a href="#beck_2001">[1]</a> für <a target="_blank" href="https://de.wikipedia.org/wiki/Agile_Softwareentwicklung" rel="noopener">agile Softwareentwicklung</a>, welches erfolgreich für eine Abkehr von herkömmlichen Methoden warb, die von Praktikern als zu bürokratisch empfunden wurden. Die Industrie ist heute zwiegespalten und setzt in Softwareprojekten zur Hälfte agile Methoden und zur anderen Hälfte herkömmliche Methoden ein. Daher stellt sich die Frage nach der Ursache. In diesem Artikel wird empirisch untersucht, ob dies am agilen Wertesystem liegt: Werden die agilen Werte von einer Mehrheit getragen? Überwiegt die konventionelle oder die agile Ethik?
+    </section>
+    <section class="keywords"><b>Keywords:</b> Agile Methoden, Agile Werte, Empirische Studie</section>
+
+    <div id="gliederung"><u>Gliederung</u></div>
+    <ul class="none-style">
+        <li><a href="#einfuehrung">1. Einführung</a></li>
+        <li><a href="#methode">2. Methode</a></li>
+        <li><a href="#experiment">3. Experiment</a></li>
+        <li><a href="#resultate">4. Resultate</a></li>
+        <li><a href="#diskussion">5. Diskussion</a></li>
+        <li><a href="#literatur">Literatur</a></li>
+    </ul>
+
+    <h2 id="einfuehrung">1. Einführung</h2>
+    <section>
+        <p>Die agile Bewegung begann mit dem <a href="http://agilemanifesto.org/iso/de/manifesto.html"></a>agilen Manifest <a href="#beck_2001">[1]</a> für <a target="_blank" href="https://de.wikipedia.org/wiki/Agile_Softwareentwicklung" rel="noopener">agile Softwareentwicklung</a>.</p>
+        <figure>
+            <img src="./img/manifest.png">
+            <figcaption>Abb.1 - Manifest für agiles Softwareentwicklung, Quelle: <a href="#beck_2001">[1]</a></figcaption>
+        </figure>
+        <p>Ausgangspunkt war die Feststellung, <em>was</em> den Praktikern <a href="https://en.wikipedia.org/wiki/Kent_Beck">Kent Beck</a> et. al., die hier zusammengekommen waren, wichtiger war als die herkömmlichen Ansätze. Damit wurde ein <a target="_blank" href="https://de.wikipedia.org/wiki/Wertvorstellung" rel="noopener">Wertesystem</a> definiert, das als Grundlage der agilen Bewegung diente, die sich rasch auch in anderen Fachgebieten durchgesetzt hat <a href="#scheller_2017">[2]</a>. Beispielsweise hat Gunter Dueck in <a href="#dueck_2016">[3]</a> das agile Wertesystem auf den Bildungsbetrieb wie folgt übertragen:</p>
+        <figure>
+            <div class="cite center">
+                <h4>Manifest für Agile Erziehung</h4>
+                <p>Wir erschließen bessere Wege, Menschen zu entwickeln, indem wir es selbst tun und anderen dabei helfen. Während dieser Tätigkeit haben wir diese Werte zu schätzen gelernt:</p>
+                <ul class="left">
+                    <li>Individuelle Menschenentwicklung über Versetzung nach Standardstufen und Klassen</li>
+                    <li>Aktivierung von Selbstwirksamkeitsgefühl über Prüfungs- und Zeugnisdokumentation</li>
+                    <li>Folgen von gewecktem Interesse über Befolgung von Lehrplänen</li>
+                    <li>Zukunftsfähigkeit der Bildung über Bewahren klassischer Vorstellungen</li>
+                </ul>
+                <p>Das heißt, obwohl wir die Werte auf der rechten Seite wichtig finden,
+                    schätzen wir die Werte auf der linken Seite höher ein.</p>
+            </div>
+            <figcaption>Abb.2 - Manifest für agile Erziehung. Quelle: <a href="#dueck_2016">[3]</a></figcaption>
+        </figure>
+        <p>Wertesysteme sind in einer pluralistischen Gesellschaft subjektiv. Wissenschaft ist objektiv und wertefrei. D.h. in der Wissenschaft werden objektive Erkenntnisse erarbeitet unabhängig von Wertesystemen. Daher kann nicht wissenschaftlich untersucht werden, ob das eine oder das andere Wertesystem objektiv richtig ist.</p>
+        <figure>
+            <img src="./img/ethik.svg">
+            <figcaption>Abb.3 - Wissenschaft, Engineering und Werte</figcaption>
+        </figure>
+        <p>Wertesysteme gehören im Wissenschaftsgebäude zum Fachgebiet der Philosophie. Man unterscheidet zwischen praktischer und theoretischer Philosophie. Die praktische Philosophie nennt man auch Ethik. Ethik beschäftigt sich grundsätzlich mit der philosophischen Frage "Was soll ich tun?" und zeigt, wie Wertesysteme als Richtungsweiser für richtiges Entscheiden und Handeln eingesetzt werden können. Agile Softwareentwicklung wirbt für eine Abkehr von herkömmlichen Methoden, die von Praktikern als zu bürokratisch empfunden werden. Das agile Wertesystem ist ein Richtungsweiser für agiles Entscheiden und Handeln in der Softwareentwicklung.</p>
+        <p>Die agile Bewegung war zunächst gestartet als Neuorientierung für Softwareentwickler. Schnell haben Manager den Nutzen für das Projektmanagement verstanden und das Wertesystem auf Management-Herausforderungen angewandt. Auf der Grundlage des gemeinsamen agilen Wertesystems sind verschiedene agile Projektmanagement-Methodologien entstanden. Die wichtigsten sind <a href="#burger_2017">[4]</a> und <a href="#reifer_2017">[5]</a>:</p>
+        <ul>
+            <li>Scrum
+            <li>Lean Development
+            <li>Kanban
+            <li>XP - Extreme Programming
+            <li>FDD - Feature-Driven Development
+            <li>Adaptive Software Development (ASD)
+            <li>Crystal Dynamic Systems Development Method (DSDM)
+            <li>AUP – Agile Unified Process
+            <li>A-Scale – Agile at scale methods
+            <li>Hybrid – Mix of methods
+        </ul>
+        <p>Dabei ist Scrum die populärste Methodologie in kleinen und mittleren Projekten, siehe Abb. 4:</p>
+        <figure>
+            <img src="./img/scrum.png">
+            <figcaption>Abb. 4 - Scrum ist die populärste agile Methodologie in kleinen und mittleren Projekten, während Hybrid in großen Projekten vorherrscht (Quelle: <a href="#reifer_2017">[5]</a>)
+            </figcaption>
+        </figure>
+        <p>Die Industrie ist heute zwiegespalten und setzt in Softwareprojekten zur Hälfte agile Methoden und zur anderen Hälfte herkömmliche Methoden ein. Daher stellt sich die Frage nach der Ursache.</p>
+        <p>In der agilen Bewegung ist das Wertesystem die Grundlage und Prinzipien, Methoden, Praktiken bauen darauf auf, siehe Abb. 5:</p>
+        <figure>
+            <img src="./img/werte.png">
+            <figcaption>Abb. 5 - Werte als Grundlage agiler Prinzipien und Praktiken
+            </figcaption>
+        </figure>
+        <p>Mit dem agilen Manifest wurde der Grundstein gelegt für agile Werte, auf denen wiederum die Prinzipien, Methoden und Praktiken aufbauen. Wenn wir also nach den grundlegenden Ursachen forschen wollen, müssen wir nach den Werten fragen. Dies ist der Forschungsansatz des vorliegenden Aufsatzes.
+        </p>
+    </section>
+
+    <h2 id="methode">2. Methode</h2>
+    <section>
+        <p>Die Forschungsfrage ist, ob die agilen Werte von einer Mehrheit getragen werden. Überwiegen die konventionellen oder die agilen Werte? Diese Frage soll mit einer Online-Umfrage beantwortet werden. Dabei ist sicher zu stellen, dass die Online-Umfrage möglichst objektiv, zuverlässig und valide ist, siehe
+            <a href="#doering_2016">[6]</a>. </p>
+    </section>
+
+    <h3>2.1. Gütekriterien für Online-Umfragen</h3>
+    <section>
+        <p>Die wichtigsten Gütekriterien für Online-Umfragen sind Objektivität, Reliabilität, Validität. Dabei kann man bei der Objektivität zwischen Durchführungs-, Auswertungs- und Interpretationsobjektivität unterscheiden, siehe
+            <a href="#doering_2016">[6]</a>,
+            <a href="#appinio_2018">[7]</a>,
+            <a href="#ROGATOR_2018">[8]</a>,
+            <a href="#niklas_2014">[9]</a>.</p>
+    </section>
+
+    <h2 id="experiment">3. Experiment</h2>
+    <section>
+        <p>Der Fragebogen wurde am 21.10.2018 ins Internet gestellt mit der folgender Einladung:</p>
+        <p class="cite">Die Industrie ist heute zwiegespalten und setzt in Softwareprojekten zur Hälfte agile Methoden und zur anderen Hälfte herkömmliche Methoden ein (Wasserfall). Daher stellt sich die Frage nach der Ursache. Mit dieser Umfrage soll empirisch untersucht werden, ob dies am agilen Wertesystem liegt: Werden die agilen Werte von einer Mehrheit getragen? Überwiegt eine konventionelle oder eine agile Ethik?</p>
+        <p>Darunter wurde mit einem Button zur Teilnahme an der Umfrage eingeladen:</p>
+        <div class="cite center">
+            <button>An der Umfrage teilnehmen!<sup>(*)</sup></button>
+            <p><sup>(*)</sup><em>Nach der Teilnahme erhalten Sie Zugriff auf die Auswertung der Umfrage.</em></p>
+        </div>
+        <p>Folgende Auswahlmöglichkeiten wurden abgefragt:</p>
+        <div id="questions" class="cite"></div>
+    </section>
+
+    <h2 id="resultate">4. Resultate</h2>
+    <section>
+        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+
+        <p>Die Umfrage wurde <span class="count_participants"></span>-mal bis zu Ende durchgeführt.</p>
+
+        <h3>4.1. Histogramme</h3>
+        <p>Wie häufig wurden die verschiedenen Antwortmöglichkeiten ausgewählt?</p>
+        <figure>
+            <div id="histogram_absolute" class="plot"></div>
+            <figcaption>Abb.1 - Häufigkeiten der Antworten je Auswahl in absoluten Zahlen</figcaption>
+        </figure>
+
+        <figure>
+            <div id="histogram_relative" class="plot"></div>
+            <figcaption>Abb.2 - Häufigkeiten der Antworten je Auswahl in Prozent</figcaption>
+        </figure>
+
+        <h3>4.2. Messung der Verzögerungen bei der Auswahl</h3>
+        <p>Wie lange benötigten die Probanden, um sich für die eine oder andere Wahl zu entscheiden?</p>
+        <figure>
+            <div id="delay_sum" class="plot"></div>
+            <figcaption>Abb.3 - Summe der Verzögerungen aller Fragebögen</figcaption>
+        </figure>
+
+        <figure>
+            <div id="delay_avg" class="plot"></div>
+            <figcaption>Abb.4 - Durchschnitt der Verzögerungen aller Fragebögen</figcaption>
+        </figure>
+
+        <figure>
+            <div id="delay_max" class="plot"></div>
+            <figcaption>Abb.5 - Maximum der Verzögerungen aller Fragebögen</figcaption>
+        </figure>
+
+        <figure>
+            <div id="delay_min" class="plot"></div>
+            <figcaption>Abb.6 - Minimum der Verzögerungen aller Fragebögen</figcaption>
+        </figure>
+
+
+        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+    </section>
+
+    <h2 id="diskussion">5. Diskussion</h2>
+    <section>
+        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+    </section>
+
+    <h2 id="literatur">Literatur</h2>
+    <section>
+        <ol>
+            <li id="beck_2001">
+                Beck, K. (2001): Manifest für Agile Softwareentwicklung, <a href="http://agilemanifesto.org/iso/de/manifesto.html">http://agilemanifesto.org/iso/de/manifesto.html</a>, seit 2001, zuletzt zugegriffen am 04.10.2018.
+            </li>
+            <li id="scheller_2017">
+                Scheller, T. (2017). Auf dem Weg zur agilen Organisation: Wie Sie Ihr Unternehmen dynamischer, flexibler und leistungsfähiger gestalten. Vahlen, 29.06.2017 - 572 Seiten. <a href="https://books.google.de/books?id=ykEqDwAAQBAJ&dq">https://books.google.de/books?id=ykEqDwAAQBAJ&dq</a>.
+            </li>
+            <li id="dueck_2016">
+                Dueck, G. (2016): Agile Erziehung oder The Agile Education Manifesto (Daily Dueck 256, Januar 2016), abgerufen unter <a href="http://www.omnisophie.com/dd256-agile-erziehung-oder-the-agile-education-manifesto-januar-2016/">http://www.omnisophie.com/dd256-agile-erziehung-oder-the-agile-education-manifesto-januar-2016/</a> am 29.1.2017.
+            </li>
+            <li id="burger_2017">
+                Burger, R. (2017). 15 Incredible Agile Project Management Statistics for 2018. veröffentlicht am 19.10.2017. zuletzt abgerufen am 16.8.2018 unter <a target="_blank" href="https://blog.capterra.com/agile-project-management-statistics-for-2018/" rel="noopener">https://blog.capterra.com/agile-project-management-statistics-for-2018/</a>.
+            </li>
+            <li id="reifer_2017">
+                Reifer, D.J., et. al. (2017). Quantitative Analysis of Agile Methods Study: Twelve Major Findings.
+            </li>
+            <li id="doering_2016">
+                Döring, N.; Bortz, J. (2016). Forschungsmethoden und Evaluation in den Sozial- und Humanwissenschaften; <a target="_blank" href="https://link.springer.com/bookseries/1183" rel="noopener">Springer-Lehrbuch</a> book series (SLB); <a target="_blank" href="https://link.springer.com/book/10.1007/978-3-642-41089-5" rel="noopener">Springer-Link</a>;  Springer-Verlag; Berlin Heidelberg; DOI https://doi.org/10.1007/978-3-642-41089-5; Online ISBN 978-3-642-41089-5.
+            </li>
+            <li id="appinio_2018">
+                appinio (2018). Qualitätskriterien eines Fragebogens in der Marktforschung; <a target="_blank" href="https://www.appinio.com/de/guetekriterien-marktforschung" rel="noopener">https://www.appinio.com/de/guetekriterien-marktforschung</a>, zuletzt abgerufen am 21.10.2018.
+            </li>
+            <li id="ROGATOR_2018">
+                ROGATOR (2017). Fragebogengüte beim Fragebogen erstellen: was ist zu beachten?; <a target="_blank" href="https://www.rogator.de/fragebogenguete-beim-fragebogen-erstellen-ist-zu-beachten/" rel="noopener"> https://www.rogator.de/fragebogenguete-beim-fragebogen-erstellen-ist-zu-beachten/ </a>; erstellt am 29.05.2017; zuletzt abgerufen am 21.10.2018.
+            </li>
+            <li id="niklas_2014">
+                 Niklas, S. (2014). Onlineforschung: Antworttendenzen, Durchklicker und Kontrollfragen; Usabilityblog; <a target="_blank" href="https://www.usabilityblog.de/onlineforschung-antworttendenzen-durchklicker-und-kontrollfragen/" rel="noopener"> https://www.usabilityblog.de/onlineforschung-antworttendenzen-durchklicker-und-kontrollfragen/ </a>; erstellt am 7.11.2014; zuletzt abgerufen am 21.10.2018.
+            </li>
+        </ol>
+    </section>
+    <hr class="finish">
+<div class="license"><a target="_blank" href="https://kaul.inf.h-brs.de/" rel="noopener"> Manfred Kaul </a>, <a target="_blank" href="https://opensource.org/licenses/MIT" rel="noopener"> MIT-Lizenz </a>, 2018.</div>
+</article>
+</div>
+<script type="module" src="./modules/paper-agile.mjs"></script>
+<script nomodule src="./paper-agile.js"></script>
+</body>

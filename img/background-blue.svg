@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 1000 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <polygon style=" fill: rgb(122, 167, 218);" points="0 500 295 500 106 0 1 1"/>
+  <polygon style=" fill: rgb(12, 37, 64);" points="590 500 399 0 102 0 290 502"/>
+  <polygon style=" fill: rgb(233, 142, 53);" points="590 500 896 501 706 1 400 1"/>
+  <polygon style="fill: rgb(251, 177, 22);" points="1000 500 1000 1 702 1 893 501"/>
+</svg>

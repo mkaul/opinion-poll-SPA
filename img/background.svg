@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 500 360" xmlns="http://www.w3.org/2000/svg">
+  <polygon style="fill: rgb(83, 188, 166);" points="0 401 202 401 0 0"/>
+  <polygon style="fill: rgb(194, 252, 115);" points="202 402 353 401 148 0 0 0"/>
+  <polygon style="fill: rgb(101, 226, 130);" points="353 400 500 402 299 0 146 0"/>
+  <polygon style="fill: rgb(83, 188, 166);" points="500 404 500 0 298 0" transform="matrix(1, 0.00282, -0.00282, 1, 0.57319, -1.11701)"/>
+</svg>

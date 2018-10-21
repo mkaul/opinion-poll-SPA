@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 350 50" xmlns="http://www.w3.org/2000/svg">
+  <g transform="matrix(0.444597, 0, 0, 0.444597, -90.424362, -90.424362)">
+    <circle cx="250" cy="250" r="46.615" style="fill: rgb(11, 161, 226);"/>
+    <circle cx="250" cy="250" r="29.368" style="fill: rgb(255, 255, 255);"/>
+  </g>
+  <circle cx="75.726" cy="20.725" r="20.725" style="fill: rgb(11, 161, 226);"/>
+  <text style="fill: white; font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: bold; white-space: pre;"><tspan x="122.423" y="12.242">Hochschule</tspan><tspan x="122.423" dy="1em">​</tspan><tspan>Bonn-Rhein-Sieg</tspan></text>
+  <text style="fill: white; font-family: Arial, Helvetica, sans-serif; font-size: 14px; white-space: pre;" x="122.423" y="41.237">University of Applied Sciences</text>
+</svg>
