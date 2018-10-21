@@ -1,5 +1,6 @@
 /**
- * @overview Defining survey questions for use in both document and scripts as well
+ * @overview DRY definition of survey questions for use in both document and scripts as well
+ * @description single place for the definition: Don´t Repeat Yourself: DRY!
  * @version 0.0.1
  * @author mkaul2m Manfred.Kaul@h-brs.de
  * @copyright The MIT License (MIT) mkaul2m on 20.10.18.
