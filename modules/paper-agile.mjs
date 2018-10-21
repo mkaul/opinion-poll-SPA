@@ -105,7 +105,7 @@ start_button.addEventListener('click', async (e) => {
         // //   results.geolocation = position;
         // // });
 
-        results.client_time = new Date();
+        results.client_time = new Date().toLocaleString();
 
         // remove NaNs from results
         const NaNs = Object.keys( results ).filter( key => ! isNaN( results[key] ) );
