@@ -24,7 +24,7 @@
     $raw_data = file_get_contents('php://input');
 
     // decode string into PHP array for security reasons
-    $json_data = json_decode( $raw_data );
+    $json_data = json_decode( $raw_data, false, 512, JSON_UNESCAPED_UNICODE );
 
     // security: locate directory of log files outside of WWW folders
     // $dir = "../../logs/";
@@ -34,7 +34,7 @@
     $filename = $dir . time() . '_' . uniqid() . ".json";
 
     // write JSON code to the new file
-    file_put_contents( $filename, json_encode( $json_data ) );
+    file_put_contents( $filename, json_encode( $json_data, JSON_UNESCAPED_UNICODE ) );
 
   }
 

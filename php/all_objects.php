@@ -9,7 +9,7 @@
   function response( $msg )
   {
     // encode message to JSON
-    $msg = json_encode( $msg );
+    $msg = json_encode( $msg, JSON_UNESCAPED_UNICODE );
 
     // filter received dynamic function name (jsonp)
     $callback = filter_input( INPUT_GET, 'callback', FILTER_SANITIZE_STRING );
@@ -41,7 +41,7 @@
   $all = array();
   foreach( $files as $file ){
     // array push
-    $all[] = json_decode( file_get_contents( $dir . $file ) );
+    $all[] = json_decode( file_get_contents( $dir . $file ), false, 512, JSON_UNESCAPED_UNICODE );
   }
 
   // encode the large array and send it back to the client
