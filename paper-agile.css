@@ -64,6 +64,10 @@ a {
     text-decoration: none;
     background-color: #f9f5f3;
 }
+a:target {
+    background-color: #ffa;
+    transition: all 1s linear;
+}
 a:hover {
     color: blue;
     background-color: lightgrey;

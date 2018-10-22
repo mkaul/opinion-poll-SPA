@@ -27,6 +27,11 @@ export const questions = [
   ["(persönliche) Beziehung", "wasserdichter Vertrag"],
   ["sich an neue Herausforderungen anpassen können", "einen festen Plan haben"]
   // ["", ""],
-];
+].map( pair => pair.map( str => str.normalize('NFKD') ) );
+
+// str.normalize('NFKD'):
+// Browsers encode Umlauts differently
+// Therefore normalize them
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/normalize
  
  

@@ -11,21 +11,8 @@ import { questions } from "../modules/questions.mjs";
 import { histogram } from "../modules/histogram.mjs";
 import { delays } from "../modules/delays.mjs";
 
-// include questions into HTML
-let questions_html = "<ol>";
-for (const answers of questions){
-  questions_html += "<li><ol type='a'>";
-  for (const answer of answers){
-    questions_html += "<li>" + answer + "</li>";
-  }
-  questions_html += "</ol></li>";
-}
-questions_html += "</ol>";
-
-const questions_div = document.getElementById("questions");
-questions_div.innerHTML = questions_html;
-
 // get elements from HTML
+const questions_div = document.getElementById("questions");
 const start_button = document.getElementById("start");
 const welcome_div = document.getElementById("welcome");
 const survey_div = document.getElementById("survey");
@@ -39,29 +26,51 @@ const delay_max_div = document.getElementById("delay_max");
 const delay_min_div = document.getElementById("delay_min");
 const count_participants_spans = document.querySelectorAll(".count_participants");
 
+// convert JavaScript question array into HTML list
+let questions_html = "<ol>";
+for (const answers of questions){
+  questions_html += "<li><ol type='a'>";
+  for (const answer of answers){
+    questions_html += "<li>" + answer + "</li>";
+  }
+  questions_html += "</ol></li>";
+}
+questions_html += "</ol>";
+
+questions_div.innerHTML = questions_html;
+
+
 // Use Location API for hash changes
 // https://developer.mozilla.org/en-US/docs/Web/API/Location
 window.onhashchange = function() {
-  if (location.hash.length > 0) {
-    if (location.hash.endsWith('paper') ){
-      welcome_div.style.display = 'none';
-      survey_div.style.display = 'none';
-      paper_div.style.animation = 'fadeIn 3s';
-      paper_div.style.display = 'block';
-      draw_results();
-    } else if (location.hash.endsWith('survey')){
-      welcome_div.style.display = 'none';
-      paper_div.style.display = 'none';
-      survey_div.style.animation = 'fadeIn 2s';
-      survey_div.style.display = 'block';
-    }
-  } else {
+  // in-page anchor
+  const anchor = document.querySelector( location.hash );
+
+  if (location.hash.length === 0){
     survey_div.style.display = 'none';
     paper_div.style.display = 'none';
     welcome_div.style.animation = 'fadeIn 2s';
     welcome_div.style.display = 'block';
   }
+  if (location.hash.length > 0) {
+    if (location.hash.endsWith('paper')) {
+      welcome_div.style.display = 'none';
+      survey_div.style.display = 'none';
+      paper_div.style.animation = 'fadeIn 3s';
+      paper_div.style.display = 'block';
+      draw_results();
+    } else if (location.hash.endsWith('survey')) {
+      welcome_div.style.display = 'none';
+      paper_div.style.display = 'none';
+      survey_div.style.animation = 'fadeIn 2s';
+      survey_div.style.display = 'block';
+    } else { // in-page anchor
+      anchor.style.backgroundColor = "rgb(255, 237, 186)";
+      anchor.style.transition = "all 3s linear";
+    }
+  }
 };
+
 
 // event listener for button
 // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
@@ -72,7 +81,7 @@ start_button.addEventListener('click', async (e) => {
   await setTimeout(()=>{start_button.style.backgroundColor = 'red'}, 200);
   setTimeout(()=>{ // start survey
 
-    window.location += '#survey';
+    window.location = '#survey';
 
     // start web component for taking survey
     ccm.start('https://ccmjs.github.io/mkaul-components/fast_poll/versions/ccm.fast_poll-2.0.0.js', {
@@ -81,7 +90,7 @@ start_button.addEventListener('click', async (e) => {
         "de": questions,
       },
       "finishListener": (e) => {
-        window.location += '#paper';
+        window.location = '#paper';
       },
       "onfinish": function( instance, results ){
         const self = instance;
@@ -143,6 +152,11 @@ async function draw_results(){
     span.innerText = count_participants;
   }
 
+  // Browsers encode Umlauts differently
+  // Therefore normalize them
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/normalize
+  dataset.forEach( data => data.texts = data.texts.map(t => t.normalize('NFKD')) );
+
   // count answers
   const counters = count( dataset ); // caching calculation of counters
   const flat_counters = Object.assign({}, ...counters);
@@ -158,10 +172,7 @@ async function draw_results(){
     });
     dataset.forEach((data)=>{
       counters.forEach((counter, i)=>{
-        // Browsers encode Umlauts differently
-        // Therefore normalize them
-        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/normalize
-        const key = data.texts[i+1].normalize('NFKD');
+        const key = data.texts[i+1];
         if ( ! counter[key] ) counter[key] = 0;
         counter[key] += 1;
       });
