@@ -107,10 +107,6 @@ start_button.addEventListener('click', async (e) => {
 
         results.client_time = new Date().toLocaleString();
 
-        // remove NaNs from results
-        const NaNs = Object.keys( results ).filter( key => ! isNaN( results[key] ) );
-        NaNs.forEach( key => delete results[key] );
-
         // log results
         fetch(new Request('https://kaul.inf.h-brs.de/data/2018/prosem/log_post.php'), {
           method: 'POST',
@@ -141,10 +137,6 @@ async function draw_results(){
     cache: 'no-store'
   })).json();
 
-  // remove NaNs from dataset
-  const NaNs = Object.keys( dataset ).filter( key => ! isNaN( dataset[key] ) );
-  NaNs.forEach( key => delete dataset[key] );
-
   // count_participants
   const count_participants = dataset.length;
   for (const span of [...count_participants_spans]){
@@ -157,23 +149,20 @@ async function draw_results(){
 
   /*
    * count number of answers
-   * @param dataset - raw dataset of dataset of survey
+   * @param dataset - raw dataset of survey
    */
   function count( dataset ){
-    const counters = questions.reduce((counters,answer,i)=>{
-      const answers = {};
-      answers[answer[0]] = 0;
-      answers[answer[1]] = 0;
-      counters.push( answers );
-      return counters;
-    }, []);
-
-    for (const data of dataset){
+    const counters = [];
+    questions.forEach(() => {
+      counters.push({});
+    });
+    dataset.forEach((data)=>{
       counters.forEach((counter, i)=>{
-        counter[data.texts[i+1]] += 1;
+        const key = data.texts[i+1].normalize('NFKD');
+        if ( ! counter[key] ) counter[key] = 0;
+        counter[key] += 1;
       });
-    }
-
+    });
     return counters;
   }
 
