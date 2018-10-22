@@ -116,6 +116,8 @@ start_button.addEventListener('click', async (e) => {
 
         results.client_time = new Date().toLocaleString();
 
+        Object.keys(results).forEach(key=>{results.texts=results.texts.map(t => t.normalize('NFKD'))});
+
         // log results
         fetch(new Request('https://kaul.inf.h-brs.de/data/2018/prosem/log_post.php'), {
           method: 'POST',
