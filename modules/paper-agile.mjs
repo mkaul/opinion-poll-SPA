@@ -158,6 +158,9 @@ async function draw_results(){
     });
     dataset.forEach((data)=>{
       counters.forEach((counter, i)=>{
+        // Browsers encode Umlauts differently
+        // Therefore normalize them
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/normalize
         const key = data.texts[i+1].normalize('NFKD');
         if ( ! counter[key] ) counter[key] = 0;
         counter[key] += 1;
