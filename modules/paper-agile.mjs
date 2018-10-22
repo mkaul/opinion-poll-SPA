@@ -172,7 +172,7 @@ async function draw_results(){
     });
     dataset.forEach((data)=>{
       counters.forEach((counter, i)=>{
-        const key = data.texts[i+1];
+        const key = data.texts[i+1].normalize('NFKD');
         if ( ! counter[key] ) counter[key] = 0;
         counter[key] += 1;
       });
