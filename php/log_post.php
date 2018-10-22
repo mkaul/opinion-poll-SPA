@@ -32,7 +32,7 @@
     }
 
     // add server date
-    $json_data["server_date"] = date("Y-m-d H:i:s");
+    $json_data["server_time"] = date("Y-m-d H:i:s");
 
     // security: locate directory of log files outside of WWW folders
     // $dir = "../../logs/";
