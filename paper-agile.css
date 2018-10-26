@@ -15,12 +15,12 @@ body {
     from { opacity: 0; }
     to { opacity: 1; }
 }
-#welcome, #survey {
+#welcome, #survey, #result {
     color: white;
     font-size: x-large;
     text-align: center;
 }
-#welcome button {
+button {
     background: none;
     transition-duration: 0.2s;
     color: white;
@@ -40,7 +40,7 @@ body {
 #welcome button sup {
     font-weight: normal;
 }
-#survey, #paper {
+#survey, #result, #paper {
     display: none;
 }
 header.paper {

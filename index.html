@@ -25,7 +25,7 @@
     <!-- END OG TAGS -->
     <link rel="stylesheet" href="paper-agile.css" type="text/css">
 
-    <script src="https://ccmjs.github.io/mkaul-components/fast_poll/versions/ccm.fast_poll-2.0.0.js" async></script>
+    <script src="https://ccmjs.github.io/mkaul-components/fast_poll/versions/ccm.fast_poll-3.0.0.js" async></script>
     <script src="https://ccmjs.github.io/mkaul-components/plotly/versions/ccm.plotly-1.0.0.js" async></script>
 </head>
 <body>
@@ -40,6 +40,13 @@
 <div id="survey">
     <h1>Umfrage zum agilen Wertesystem</h1>
     <div id="ccm_poll"></div>
+</div>
+<div id="result">
+    <h1>Vielen Dank für Ihre Teilnahme.
+        <br>Ihr persönliches Ergebnis:
+    <br> Sie sind zu <span class="agile_percentage">x</span>% agil.</h1>
+    <div id="poll_result"></div>
+    <button id="start_paper">Weiter zum Artikel über die bisherigen Ergebnisse der Umfrage</button>
 </div>
 <div id="paper">
 <header class="paper">
@@ -174,38 +181,74 @@
 
         <p>Die Umfrage wurde <span class="count_participants"></span>-mal bis zu Ende durchgeführt.</p>
 
-        <h3>4.1. Histogramme</h3>
+        <h3>4.1. Histogramme für Antwortkategorien</h3>
+        <p>Wie häufig wurden die verschiedenen Antwortkategorien ausgewählt?</p>
+
+        <figure>
+            <div id="histogram_categories_absolute" class="plot"></div>
+            <figcaption>Abb.1 - Häufigkeiten der Antwortkategorien in absoluten Zahlen</figcaption>
+        </figure>
+
+        <figure>
+            <div id="histogram_categories_relative" class="plot"></div>
+            <figcaption>Abb.2 - Häufigkeiten der Antwortkategorien in Prozent</figcaption>
+        </figure>
+
+        <h3>4.2. Histogramme für konkrete Antworten</h3>
         <p>Wie häufig wurden die verschiedenen Antwortmöglichkeiten ausgewählt?</p>
+
         <figure>
             <div id="histogram_absolute" class="plot"></div>
-            <figcaption>Abb.1 - Häufigkeiten der Antworten je Auswahl in absoluten Zahlen</figcaption>
+            <figcaption>Abb.3 - Häufigkeiten der Antworten je Auswahl in absoluten Zahlen</figcaption>
         </figure>
 
         <figure>
             <div id="histogram_relative" class="plot"></div>
-            <figcaption>Abb.2 - Häufigkeiten der Antworten je Auswahl in Prozent</figcaption>
+            <figcaption>Abb.4 - Häufigkeiten der Antworten je Auswahl in Prozent</figcaption>
         </figure>
 
-        <h3>4.2. Messung der Verzögerungen bei der Auswahl</h3>
-        <p>Wie lange benötigten die Probanden, um sich für die eine oder andere Wahl zu entscheiden?</p>
+        <h3>4.3. Messung der Verzögerungen bei den Kategorien</h3>
+        <p>Wie lange benötigten die Probanden, um sich für die eine oder andere Antwortkategorie zu entscheiden?</p>
+        <figure>
+            <div id="delay_cat_sum" class="plot"></div>
+            <figcaption>Abb.5 - Summe der Verzögerungen bei den Kategorien</figcaption>
+        </figure>
+
+        <figure>
+            <div id="delay_cat_avg" class="plot"></div>
+            <figcaption>Abb.6 - Durchschnitt der Verzögerungen bei den Kategorien</figcaption>
+        </figure>
+
+        <figure>
+            <div id="delay_cat_max" class="plot"></div>
+            <figcaption>Abb.7 - Maximum der Verzögerungen bei den Kategorien</figcaption>
+        </figure>
+
+        <figure>
+            <div id="delay_cat_min" class="plot"></div>
+            <figcaption>Abb.8 - Minimum der Verzögerungen bei den Kategorien</figcaption>
+        </figure>
+
+        <h3>4.4. Messung der Verzögerungen bei der Auswahl der konkreten Antwort</h3>
+        <p>Wie lange benötigten die Probanden, um sich für die eine oder andere Wahl der konkreten Antwort zu entscheiden?</p>
         <figure>
             <div id="delay_sum" class="plot"></div>
-            <figcaption>Abb.3 - Summe der Verzögerungen aller Fragebögen</figcaption>
+            <figcaption>Abb.9 - Summe der Verzögerungen aller Fragebögen bei der Auswahl der konkreten Antwort</figcaption>
         </figure>
 
         <figure>
             <div id="delay_avg" class="plot"></div>
-            <figcaption>Abb.4 - Durchschnitt der Verzögerungen aller Fragebögen</figcaption>
+            <figcaption>Abb.10 - Durchschnitt der Verzögerungen aller Fragebögen bei der Auswahl der konkreten Antwort</figcaption>
         </figure>
 
         <figure>
             <div id="delay_max" class="plot"></div>
-            <figcaption>Abb.5 - Maximum der Verzögerungen aller Fragebögen</figcaption>
+            <figcaption>Abb.11 - Maximum der Verzögerungen aller Fragebögen bei der Auswahl der konkreten Antwort</figcaption>
         </figure>
 
         <figure>
             <div id="delay_min" class="plot"></div>
-            <figcaption>Abb.6 - Minimum der Verzögerungen aller Fragebögen</figcaption>
+            <figcaption>Abb.12 - Minimum der Verzögerungen aller Fragebögen bei der Auswahl der konkreten Antwort</figcaption>
         </figure>
 
 

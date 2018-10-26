@@ -9,35 +9,35 @@
 // https://developers.google.com/web/fundamentals/primers/modules
 import { questions } from "../modules/questions.mjs";
 import { histogram } from "../modules/histogram.mjs";
+import { histogram_categories } from "../modules/histogram_categories.mjs";
 import { delays } from "../modules/delays.mjs";
+import { delay_categories } from "../modules/delay_categories.mjs";
+
+let individual_results; // results of a single survey
 
 // get elements from HTML
-const questions_div = document.getElementById("questions");
 const start_button = document.getElementById("start");
-const welcome_div = document.getElementById("welcome");
-const survey_div = document.getElementById("survey");
-const ccm_poll_div = document.getElementById("ccm_poll");
-const paper_div = document.getElementById("paper");
-const histogram_absolute_div = document.getElementById("histogram_absolute");
-const histogram_relative_div = document.getElementById("histogram_relative");
-const delay_sum_div = document.getElementById("delay_sum");
-const delay_avg_div = document.getElementById("delay_avg");
-const delay_max_div = document.getElementById("delay_max");
-const delay_min_div = document.getElementById("delay_min");
-const count_participants_spans = document.querySelectorAll(".count_participants");
+const start_paper = document.getElementById("start_paper");
+start_paper.addEventListener( 'click', () => { window.location = '#paper' } );
+const div = (id) => {
+  return document.getElementById(id);
+};
+const span = (class_name) => {
+  return document.querySelectorAll('.' + class_name);
+};
 
 // convert JavaScript question array into HTML list
 let questions_html = "<ol>";
 for (const answers of questions){
   questions_html += "<li><ol type='a'>";
-  for (const answer of answers){
+  for (const answer of Object.values(answers)){
     questions_html += "<li>" + answer + "</li>";
   }
   questions_html += "</ol></li>";
 }
 questions_html += "</ol>";
 
-questions_div.innerHTML = questions_html;
+div("questions").innerHTML = questions_html;
 
 
 // Use Location API for hash changes
@@ -47,23 +47,33 @@ window.onhashchange = function() {
   const anchor = document.querySelector( location.hash );
 
   if (location.hash.length === 0){
-    survey_div.style.display = 'none';
-    paper_div.style.display = 'none';
-    welcome_div.style.animation = 'fadeIn 2s';
-    welcome_div.style.display = 'block';
+    div("survey").style.display = 'none';
+    div("paper").style.display = 'none';
+    div("welcome").style.animation = 'fadeIn 2s';
+    div("welcome").style.display = 'block';
   }
   if (location.hash.length > 0) {
     if (location.hash.endsWith('paper')) {
-      welcome_div.style.display = 'none';
-      survey_div.style.display = 'none';
-      paper_div.style.animation = 'fadeIn 3s';
-      paper_div.style.display = 'block';
-      draw_results();
+      div("welcome").style.display = 'none';
+      div("survey").style.display = 'none';
+      div("result").style.display = 'none';
+      div("paper").style.animation = 'fadeIn 3s';
+      div("paper").style.display = 'block';
+      draw_figures_in_paper();
     } else if (location.hash.endsWith('survey')) {
-      welcome_div.style.display = 'none';
-      paper_div.style.display = 'none';
-      survey_div.style.animation = 'fadeIn 2s';
-      survey_div.style.display = 'block';
+      div("welcome").style.display = 'none';
+      div("paper").style.display = 'none';
+      div("result").style.display = 'none';
+      div("survey").style.animation = 'fadeIn 2s';
+      div("survey").style.display = 'block';
+      start_survey();
+    } else if (location.hash.endsWith('result')) {
+      div("welcome").style.display = 'none';
+      div("survey").style.display = 'none';
+      div("paper").style.display = 'none';
+      div("result").style.animation = 'fadeIn 2s';
+      div("result").style.display = 'block';
+      draw_results( individual_results );
     } else { // in-page anchor
       anchor.style.backgroundColor = "rgb(255, 237, 186)";
       anchor.style.transition = "all 3s linear";
@@ -74,73 +84,113 @@ window.onhashchange = function() {
 
 // event listener for button
 // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
-start_button.addEventListener('click', async (e) => {
+start_button.addEventListener('click', () => {
+
   // animate button
   start_button.style.backgroundColor = 'red';
-  await setTimeout(()=>{start_button.style.backgroundColor = 'white'}, 200);
-  await setTimeout(()=>{start_button.style.backgroundColor = 'red'}, 200);
-  setTimeout(()=>{ // start survey
+  // await setTimeout(()=>{start_button.style.backgroundColor = 'white'}, 200);
+  // await setTimeout(()=>{start_button.style.backgroundColor = 'red'}, 200);
 
-    window.location = '#survey';
+  // start survey
+  window.location = '#survey';
 
-    // start web component for taking survey
-    ccm.start('https://ccmjs.github.io/mkaul-components/fast_poll/versions/ccm.fast_poll-2.0.0.js', {
-      root: ccm_poll_div,
-      "choices": {
-        "de": questions,
-      },
-      "finishListener": (e) => {
-        window.location = '#paper';
-      },
-      "onfinish": function( instance, results ){
-        const self = instance;
-
-        // // results.navigator = Object.assign( {}, navigator );
-        // results.navigator = Object.getOwnPropertyNames(navigator.__proto__).reduce((a,b)=>{a[b]=navigator[b];return a;}, {});
-        // results.navi_string = JSON.stringify(results.navigator);
-        // // results.history = Object.assign( {}, history );
-        // results.history = Object.getOwnPropertyNames(history.__proto__).reduce((a,b)=>{a[b]=history[b];return a;}, {});
-        //
-        // // collecting additional informations
-        // results.client_date = new Date();
-        // results.cookies = document.cookie;
-        // const w = window,
-        //   d = document,
-        //   e = d.documentElement,
-        //   g = d.getElementsByTagName('body')[0];
-        // results.x = w.innerWidth || e.clientWidth || g.clientWidth;
-        // results.y = w.innerHeight|| e.clientHeight|| g.clientHeight;
-        // // navigator.geolocation.getCurrentPosition( position => {
-        // //   results.geolocation = position;
-        // // });
-
-        results.client_time = new Date().toLocaleString();
-
-        Object.keys(results).forEach(key=>{results.texts=results.texts.map(t => t.normalize('NFKD'))});
-
-        // log results
-        fetch(new Request('https://kaul.inf.h-brs.de/data/2018/prosem/log_post.php'), {
-          method: 'POST',
-          mode: 'cors',
-          cache: 'no-store',
-          body: JSON.stringify( results ),
-          headers:{
-            'Content-Type': 'application/json'
-          }
-        });
-      }
-    }, instance => {
-
-      console.log( 'ccm started.' );
-
-    });
-  },200);
 });
+
+function start_survey(){
+  ccm.start('https://ccmjs.github.io/mkaul-components/fast_poll/versions/ccm.fast_poll-3.0.0.js', {
+    root: div("ccm_poll"),
+    choices: questions,
+    randomize: {
+      row: true,
+      column: true
+    },
+    finishListener: (e) => {
+      window.location = '#paper';
+    },
+    onfinish: function( instance, results ){
+      const self = instance;
+
+      // // results.navigator = Object.assign( {}, navigator );
+      // results.navigator = Object.getOwnPropertyNames(navigator.__proto__).reduce((a,b)=>{a[b]=navigator[b];return a;}, {});
+      // results.navi_string = JSON.stringify(results.navigator);
+      // // results.history = Object.assign( {}, history );
+      // results.history = Object.getOwnPropertyNames(history.__proto__).reduce((a,b)=>{a[b]=history[b];return a;}, {});
+      //
+      // // collecting additional informations
+      // results.client_date = new Date();
+      // results.cookies = document.cookie;
+      // const w = window,
+      //   d = document,
+      //   e = d.documentElement,
+      //   g = d.getElementsByTagName('body')[0];
+      // results.x = w.innerWidth || e.clientWidth || g.clientWidth;
+      // results.y = w.innerHeight|| e.clientHeight|| g.clientHeight;
+      // // navigator.geolocation.getCurrentPosition( position => {
+      // //   results.geolocation = position;
+      // // });
+
+      results.client_time = new Date().toLocaleString();
+
+      Object.keys(results).forEach(key=>{results.texts=results.texts.map(t => t.normalize('NFKD'))});
+
+      // log results
+      fetch(new Request('https://kaul.inf.h-brs.de/data/2018/prosem/log_post.php'), {
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-store',
+        body: JSON.stringify( results ),
+        headers:{
+          'Content-Type': 'application/json'
+        }
+      });
+
+      individual_results = results; // TODO: $.clone( results );
+
+      window.location = '#result';
+    }
+  });
+}
+
+/*
+* use local data, calculate individual results and draw them into result_div
+* @param individual_results
+*/
+function draw_results( individual_results ){
+
+  // calculate percentage: How agile is the current user?
+  let counters = { agile: 0, planned: 0 }, max = 0;
+  individual_results.categories.forEach( cat => {
+    max += 1;
+    if ( cat === "agil" ){
+      counters.agile += 1;
+    } else {
+      counters.planned += 1;
+    }
+  });
+  [...span('agile_percentage')].forEach(
+    span => span.innerText = (100 * counters.agile / max).toFixed(2)
+  );
+
+  // plot cake chart
+  ccm.start("https://ccmjs.github.io/mkaul-components/plotly/versions/ccm.plotly-1.0.0.js", {
+    root: div('poll_result'),
+    data: [
+      {
+        "values": Object.values( counters ),
+        "labels": Object.keys( counters ),
+        "type": "pie"
+      }
+    ],
+    plot_config: {
+      responsive: true
+    }
+  } );
+}
 
 /*
 * fetch dataset from server, calculate results and draw them
 */
-async function draw_results(){
+async function draw_figures_in_paper(){
   // const dataset = await ccm.load( { url: 'https://kaul.inf.h-brs.de/data/2018/prosem/all_objects.php', method: 'GET' } );
   const dataset = await (await fetch(new Request('https://kaul.inf.h-brs.de/data/2018/prosem/all_objects.php'), {
     method: 'GET',
@@ -150,14 +200,32 @@ async function draw_results(){
 
   // count_participants
   const count_participants = dataset.length;
-  for (const span of [...count_participants_spans]){
+  [...span('count_participants')].forEach( span => {
     span.innerText = count_participants;
-  }
+  });
 
   // Browsers encode Umlauts differently
   // Therefore normalize them
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/normalize
   dataset.forEach( data => data.texts = data.texts.map(t => t.normalize('NFKD')) );
+
+  // count categories
+  const [ category_counters, sum_categories ] = count_categories();
+
+  function count_categories(){
+    const category_counters = {};
+    let sum_categories = 0;
+    dataset.forEach( data => {
+      data.categories.forEach( category => {
+        if ( category === "0" ) return;
+        if ( ! category_counters[category] ) category_counters[category] = 0;
+        category_counters[category] += 1;
+        sum_categories += 1;
+      })
+    });
+    return [ category_counters, sum_categories ];
+  }
+
 
   // count answers
   const counters = count( dataset ); // caching calculation of counters
@@ -182,27 +250,83 @@ async function draw_results(){
     return counters;
   }
 
+  histogram_categories(
+    'Histogramm Kategorien absolut <i>(n = ' + count_participants + ')</i>',
+    category_counters,
+    div("histogram_categories_absolute")
+  );
+
+  histogram_categories(
+    'Histogramm Kategorien in Prozent <i>(n = ' + count_participants + ')</i>',
+    category_counters,
+    div("histogram_categories_relative"),
+    c => 100 * c / sum_categories
+  );
+
   histogram(
     'Histogramm absolut <i>(n = ' + count_participants + ')</i>',
     dataset,
     counters,
-    histogram_absolute_div
+    div("histogram_absolute")
   );
 
   histogram(
     'Histogramm in Prozent <i>(n = ' + count_participants + ')</i>',
     dataset,
     counters,
-    histogram_relative_div,
+    div("histogram_relative"),
     c=>100*c/count_participants
   );
+
+  // ============== Categories =================
+  // Sum
+  delay_categories(
+    'Summe aller Verzögerungen in Millisekunden (msec) <i>(n = ' + count_participants + ')</i>',
+    dataset,
+    category_counters,
+    div("delay_cat_sum"),
+    (delay_sums, result, i) => delay_sums[result.categories[i]] += delay_sums[result.categories[i]] += (result.timer[i]-result.timer[i-1]) // sum
+  );
+
+  // Average
+  delay_categories(
+    'Durchschnitt aller Verzögerungen in Millisekunden (msec) <i>(n = ' + count_participants + ')</i>',
+    dataset,
+    category_counters,
+    div("delay_cat_avg"),
+    (delay_sums, result, i) => delay_sums[result.categories[i]] += delay_sums[result.categories[i]] += (result.timer[i]-result.timer[i-1]) / category_counters[result.categories[i]]
+  );
+
+  // Maximum
+  delay_categories(
+    'Maximum aller Verzögerungen in Millisekunden (msec) <i>(n = ' + count_participants + ')</i>',
+    dataset,
+    category_counters,
+    div("delay_cat_max"),
+    (delay_sums, result, i) => delay_sums[result.categories[i]] = Math.max( delay_sums[ result.categories[i] ], ( result.timer[i] - result.timer[i-1] ) )
+  );
+
+  // Minimum
+  delay_categories(
+    'Minimum aller Verzögerungen in Millisekunden (msec) <i>(n = ' + count_participants + ')</i>',
+    dataset,
+    category_counters,
+    div("delay_cat_min"),
+    (delay_sums, result, i) => {
+      // avoid 0 as minimum
+      if ( delay_sums[result.categories[i]] === 0 ) delay_sums[result.categories[i]] = result.timer[i] - result.timer[i-1];
+      delay_sums[result.categories[i]] = Math.min( delay_sums[ result.categories[i] ], ( result.timer[i] - result.timer[i-1] ) );
+    }
+  );
+
+  // =============== Single Answer ==================
 
   // Sum
   delays(
     'Summe aller Verzögerungen in Millisekunden (msec) <i>(n = ' + count_participants + ')</i>',
     dataset,
     counters,
-    delay_sum_div,
+    div("delay_sum"),
     (delay_sums, result, i) => delay_sums[result.texts[i]] += delay_sums[result.texts[i]] += (result.timer[i]-result.timer[i-1]) // sum
   );
 
@@ -211,7 +335,7 @@ async function draw_results(){
     'Durchschnitt aller Verzögerungen in Millisekunden (msec) <i>(n = ' + count_participants + ')</i>',
     dataset,
     counters,
-    delay_avg_div,
+    div("delay_avg"),
     (delay_sums, result, i) => delay_sums[result.texts[i]] += delay_sums[result.texts[i]] += (result.timer[i]-result.timer[i-1]) / flat_counters[result.texts[i]]
   );
 
@@ -220,7 +344,7 @@ async function draw_results(){
     'Maximum aller Verzögerungen in Millisekunden (msec) <i>(n = ' + count_participants + ')</i>',
     dataset,
     counters,
-    delay_max_div,
+    div("delay_max"),
     (delay_sums, result, i) => delay_sums[result.texts[i]] = Math.max( delay_sums[ result.texts[i] ], ( result.timer[i] - result.timer[i-1] ) )
   );
 
@@ -229,7 +353,7 @@ async function draw_results(){
     'Minimum aller Verzögerungen in Millisekunden (msec) <i>(n = ' + count_participants + ')</i>',
     dataset,
     counters,
-    delay_min_div,
+    div("delay_min"),
     (delay_sums, result, i) => {
       // avoid 0 as minimum
       if ( delay_sums[result.texts[i]] === 0 ) delay_sums[result.texts[i]] = result.timer[i] - result.timer[i-1];

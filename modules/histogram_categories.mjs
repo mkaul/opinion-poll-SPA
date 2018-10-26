@@ -5,28 +5,24 @@
  * @copyright The MIT License (MIT) mkaul2m on 20.10.18.
  */
 
-export const histogram = ( title, results, counters, plot_result, mapping ) => {
+export const histogram_categories = ( title, category_counters, plot_result, mapping ) => {
 
   // console.log(  title, results, counters, plot_result, mapping  );
 
-  const data = [];
-  counters.forEach((counter, i)=>{
-    const group = {
-      name: 'Auswahl ' + (i+1),
-      type: 'bar'
-    };
-    group.x = Object.keys(counter);
-    group.y = Object.values(counter).map( mapping || ( c => c ) );
-    data.push(group);
-  });
+  const data = [
+    {
+      "x": Object.keys(category_counters),
+      "y": Object.values(category_counters).map( mapping || ( x => x ) ),
+      "type": "bar"
+    }
+  ];
 
   // render chart
   ccm.start("https://ccmjs.github.io/mkaul-components/plotly/versions/ccm.plotly-1.0.0.js", {
     root: plot_result,
     data: data,
     layout: {
-      title: title,
-      barmode: 'group'
+      title: title
     },
     plot_config: {
       responsive: true

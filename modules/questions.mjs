@@ -10,24 +10,24 @@ export const questions = [
   // ["männlich","weiblich","divers"],
   // ["Alter: 18-25", "Alter: 26-30", "Alter: 31-40", "Alter: 41-50", "jünger", "älter"],
 
-  // Manifest
-  ["Individuen und Interaktionen",  "Prozesse und Werkzeuge"],
-  ["Funktionierende Software",  "Umfassende Dokumentation"],
-  ["Zusammenarbeit mit dem Kunden",  "Vertragsverhandlung"],
-  ["Reagieren auf Veränderung",  "Befolgen eines Plans"],
+  // Manifest // http://agilemanifesto.org/iso/de/manifesto.html
+  {agil: 'Individuen und Interaktionen', plan: 'Prozesse und Werkzeuge'},
+  {agil: 'Funktionierende Software', plan: 'umfassende Dokumentation'},
+  {agil: 'Zusammenarbeit mit dem Kunden', plan: 'Vertragsverhandlung'},
+  {agil: 'Reagieren auf Veränderung', plan: 'Befolgen eines Plans'},
 
   // Gunter Dueck
-  ["Individuelle Menschenentwicklung", "Versetzung nach Standardstufen und Klassen"],
-  ["Aktivierung von Selbstwirksamkeitsgefühl", "Prüfungs- und Zeugnisdokumentation"],
-  ["Folgen von gewecktem Interesse", "Befolgung von Lehrplänen"],
-  ["Zukunftsfähigkeit der Bildung", "Bewahren klassischer Vorstellungen"],
+  {agil: "Individuelle Menschenentwicklung", plan: "Versetzung nach Standardstufen und Klassen"},
+  {agil: "Aktivierung von Selbstwirksamkeitsgefühl", plan: "Prüfungs- und Zeugnisdokumentation"},
+  {agil: "Folgen von gewecktem Interesse", plan: "Befolgung von Lehrplänen"},
+  {agil: "Zukunftsfähigkeit der Bildung", plan: "Bewahren klassischer Vorstellungen"},
 
   // https://digitaleneuordnung.de/blog/agiles-manifest-fuer-unternehmensentwicklung/
-  ["Konkrete Leistung", "Powerpoint"],
-  ["(persönliche) Beziehung", "wasserdichter Vertrag"],
-  ["sich an neue Herausforderungen anpassen können", "einen festen Plan haben"]
-  // ["", ""],
-].map( pair => pair.map( str => str.normalize('NFKD') ) );
+  {agil: "Konkrete Leistung", plan: "Powerpoint"},
+  {agil: "(persönliche) Beziehung", plan: "wasserdichter Vertrag"},
+  {agil: "sich an neue Herausforderungen anpassen können", plan: "einen festen Plan haben"}
+
+];
 
 // str.normalize('NFKD'):
 // Browsers encode Umlauts differently
