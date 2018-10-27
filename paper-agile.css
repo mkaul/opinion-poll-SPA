@@ -31,12 +31,17 @@ button {
     padding: 0.5rem;
     margin: 2rem;
 }
-#welcome button:hover {
+button:hover {
     color: black;
     font-weight: bolder;
     background-color: white;
     cursor: pointer;
 }
+div.cite button {
+    color: black;
+    border: thin solid black;
+}
+div.cite button:hover {}
 #welcome button sup {
     font-weight: normal;
 }

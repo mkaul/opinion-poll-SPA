@@ -9,7 +9,7 @@
 
 import './sum1.test.mjs';
 import './sum2.test.mjs';
-import './histogram.test.mjs';
+import './distribution.test.mjs';
 
 mocha.checkLeaks();
 mocha.run();

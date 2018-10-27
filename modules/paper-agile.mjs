@@ -8,17 +8,30 @@
 // use relative paths for module import
 // https://developers.google.com/web/fundamentals/primers/modules
 import { questions } from "../modules/questions.mjs";
+import { distribution } from "../modules/distribution.mjs";
 import { histogram } from "../modules/histogram.mjs";
 import { histogram_categories } from "../modules/histogram_categories.mjs";
 import { delays } from "../modules/delays.mjs";
 import { delay_categories } from "../modules/delay_categories.mjs";
 
-let individual_results; // results of a single survey
+let individual_results; // results of this single survey
 
 // get elements from HTML
-const start_button = document.getElementById("start");
-const start_paper = document.getElementById("start_paper");
-start_paper.addEventListener( 'click', () => { window.location = '#paper' } );
+const start_survey_button = document.getElementById("start");
+const start_paper_button = document.getElementById("start_paper");
+
+// event listener for buttons
+// https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
+start_survey_button.addEventListener('click', () => {
+  start_survey_button.style.backgroundColor = 'red';
+  window.location = '#survey';
+});
+start_paper_button.addEventListener( 'click', () => {
+  start_paper_button.style.backgroundColor = 'red';
+  window.location = '#paper';
+} );
+
+// universal functions for getting div and span elements from HTML
 const div = (id) => {
   return document.getElementById(id);
 };
@@ -48,19 +61,12 @@ window.onhashchange = function() {
 
   if (location.hash.length === 0){
     div("survey").style.display = 'none';
+    div("result").style.display = 'none';
     div("paper").style.display = 'none';
     div("welcome").style.animation = 'fadeIn 2s';
     div("welcome").style.display = 'block';
-  }
-  if (location.hash.length > 0) {
-    if (location.hash.endsWith('paper')) {
-      div("welcome").style.display = 'none';
-      div("survey").style.display = 'none';
-      div("result").style.display = 'none';
-      div("paper").style.animation = 'fadeIn 3s';
-      div("paper").style.display = 'block';
-      draw_figures_in_paper();
-    } else if (location.hash.endsWith('survey')) {
+  } else { // location.hash.length > 0
+    if (location.hash.endsWith('survey')) {
       div("welcome").style.display = 'none';
       div("paper").style.display = 'none';
       div("result").style.display = 'none';
@@ -73,28 +79,21 @@ window.onhashchange = function() {
       div("paper").style.display = 'none';
       div("result").style.animation = 'fadeIn 2s';
       div("result").style.display = 'block';
-      draw_results( individual_results );
-    } else { // in-page anchor
+      draw_results(individual_results);
+    } else if (location.hash.endsWith('paper')) {
+      div("welcome").style.display = 'none';
+      div("survey").style.display = 'none';
+      div("result").style.display = 'none';
+      div("paper").style.animation = 'fadeIn 3s';
+      div("paper").style.display = 'block';
+      generate_paper();
+    } else { // location.hash is an in-page anchor
       anchor.style.backgroundColor = "rgb(255, 237, 186)";
       anchor.style.transition = "all 3s linear";
     }
   }
 };
 
-
-// event listener for button
-// https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
-start_button.addEventListener('click', () => {
-
-  // animate button
-  start_button.style.backgroundColor = 'red';
-  // await setTimeout(()=>{start_button.style.backgroundColor = 'white'}, 200);
-  // await setTimeout(()=>{start_button.style.backgroundColor = 'red'}, 200);
-
-  // start survey
-  window.location = '#survey';
-
-});
 
 function start_survey(){
   ccm.start('https://ccmjs.github.io/mkaul-components/fast_poll/versions/ccm.fast_poll-3.0.0.js', {
@@ -133,6 +132,18 @@ function start_survey(){
 
       Object.keys(results).forEach(key=>{results.texts=results.texts.map(t => t.normalize('NFKD'))});
 
+      // calculate percentage: How agile is the current user?
+      results.category_counters = {};
+      let max = 0;
+      results.categories.forEach( cat => {
+        if ( cat === "0" ) return;
+        max += 1;
+        if ( ! results.category_counters[ cat ] ) results.category_counters[ cat ] = 0;
+        results.category_counters[ cat ] += 1;
+      });
+
+      results.final_percentage = (100 * results.category_counters.agil / max);
+
       // log results
       fetch(new Request('https://kaul.inf.h-brs.de/data/2018/prosem/log_post.php'), {
         method: 'POST',
@@ -144,7 +155,7 @@ function start_survey(){
         }
       });
 
-      individual_results = results; // TODO: $.clone( results );
+      individual_results = Object.assign( {}, results ); // ccm.helper.clone( results );
 
       window.location = '#result';
     }
@@ -158,17 +169,8 @@ function start_survey(){
 function draw_results( individual_results ){
 
   // calculate percentage: How agile is the current user?
-  let counters = { agile: 0, planned: 0 }, max = 0;
-  individual_results.categories.forEach( cat => {
-    max += 1;
-    if ( cat === "agil" ){
-      counters.agile += 1;
-    } else {
-      counters.planned += 1;
-    }
-  });
   [...span('agile_percentage')].forEach(
-    span => span.innerText = (100 * counters.agile / max).toFixed(2)
+    span => span.innerText = individual_results.final_percentage.toFixed(2)
   );
 
   // plot cake chart
@@ -176,11 +178,14 @@ function draw_results( individual_results ){
     root: div('poll_result'),
     data: [
       {
-        "values": Object.values( counters ),
-        "labels": Object.keys( counters ),
+        "values": Object.values( individual_results.category_counters ),
+        "labels": Object.keys( individual_results.category_counters ),
         "type": "pie"
       }
     ],
+    layout: {
+      title: 'Persönliches Ergebnis'
+    },
     plot_config: {
       responsive: true
     }
@@ -190,7 +195,14 @@ function draw_results( individual_results ){
 /*
 * fetch dataset from server, calculate results and draw them
 */
-async function draw_figures_in_paper(){
+export async function generate_paper(){
+
+  // automatic numbering of figures
+  let fig_number = 1;
+  [...document.querySelectorAll('figcaption')].forEach(figcaption=>{
+    figcaption.prepend('Abb. ' + (fig_number++) + ': ');
+  });
+
   // const dataset = await ccm.load( { url: 'https://kaul.inf.h-brs.de/data/2018/prosem/all_objects.php', method: 'GET' } );
   const dataset = await (await fetch(new Request('https://kaul.inf.h-brs.de/data/2018/prosem/all_objects.php'), {
     method: 'GET',
@@ -203,6 +215,8 @@ async function draw_figures_in_paper(){
   [...span('count_participants')].forEach( span => {
     span.innerText = count_participants;
   });
+
+  distribution( 'Verteilung der Ergebnisse', div('distribution'), [20,40,60,80], dataset, ccm );
 
   // Browsers encode Umlauts differently
   // Therefore normalize them

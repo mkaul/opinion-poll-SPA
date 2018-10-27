@@ -28,6 +28,19 @@
 
     <!-- prefetch JavaScript for performance reasons -->
     <script src="https://ccmjs.github.io/mkaul-components/fast_poll/versions/ccm.fast_poll-3.0.0.js" async></script>
+
+    <!-- Paper only-->
+    <style>
+        #paper {
+            display: block;
+        }
+        #welcome, #survey, #result {
+            display: none;
+        }
+    </style>
+    <script>
+      window.location = '#paper';
+    </script>
 </head>
 <body>
 <img class="logo" src="img/h-brs-white.svg" width="85vw">
@@ -45,7 +58,7 @@
 <div id="result">
     <h1>Vielen Dank für Ihre Teilnahme.
         <br>Ihr persönliches Ergebnis:
-    <br> Sie sind zu <span class="agile_percentage">x</span>% agil.</h1>
+        <br> Sie sind zu <span class="agile_percentage">x</span>% agil.</h1>
     <div id="poll_result"></div>
     <button id="start_paper">Weiter zum Artikel über die bisherigen Ergebnisse der Umfrage</button>
 </div>
@@ -312,6 +325,9 @@
 <div class="license"><a target="_blank" href="https://kaul.inf.h-brs.de/" rel="noopener"> Manfred Kaul </a>, <a target="_blank" href="https://opensource.org/licenses/MIT" rel="noopener"> MIT-Lizenz </a>, 2018.</div>
 </article>
 </div>
-<script type="module" src="./modules/paper-agile.mjs"></script>
+<script type="module">
+    import {generate_paper} from './modules/paper-agile.mjs';
+    generate_paper();
+</script>
 <script nomodule src="./paper-agile.js"></script>
 </body>
