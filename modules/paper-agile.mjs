@@ -100,8 +100,8 @@ function start_survey(){
     root: div("ccm_poll"),
     choices: questions,
     randomize: {
-      row: true,
-      column: true
+      row: false,
+      column: false
     },
     finishListener: (e) => {
       window.location = '#paper';
@@ -216,7 +216,7 @@ export async function generate_paper(){
     span.innerText = count_participants;
   });
 
-  distribution( 'Verteilung der Ergebnisse', div('distribution'), [20,40,60,80], dataset, ccm );
+  distribution( 'Verteilung des agilen Anteils', div('distribution'), [20,40,60,80,100], dataset, ccm );
 
   // Browsers encode Umlauts differently
   // Therefore normalize them
@@ -299,7 +299,7 @@ export async function generate_paper(){
     dataset,
     category_counters,
     div("delay_cat_sum"),
-    (delay_sums, result, i) => delay_sums[result.categories[i]] += delay_sums[result.categories[i]] += (result.timer[i]-result.timer[i-1]) // sum
+    (delay_sums, result, i) => delay_sums[result.categories[i]] += (result.timer[i]-result.timer[i-1]) // sum
   );
 
   // Average
@@ -308,7 +308,7 @@ export async function generate_paper(){
     dataset,
     category_counters,
     div("delay_cat_avg"),
-    (delay_sums, result, i) => delay_sums[result.categories[i]] += delay_sums[result.categories[i]] += (result.timer[i]-result.timer[i-1]) / category_counters[result.categories[i]]
+    (delay_sums, result, i) => delay_sums[result.categories[i]] += (result.timer[i]-result.timer[i-1]) / category_counters[result.categories[i]]
   );
 
   // Maximum
@@ -341,7 +341,7 @@ export async function generate_paper(){
     dataset,
     counters,
     div("delay_sum"),
-    (delay_sums, result, i) => delay_sums[result.texts[i]] += delay_sums[result.texts[i]] += (result.timer[i]-result.timer[i-1]) // sum
+    (delay_sums, result, i) => delay_sums[result.texts[i]] += (result.timer[i]-result.timer[i-1]) // sum
   );
 
   // Average
@@ -350,7 +350,7 @@ export async function generate_paper(){
     dataset,
     counters,
     div("delay_avg"),
-    (delay_sums, result, i) => delay_sums[result.texts[i]] += delay_sums[result.texts[i]] += (result.timer[i]-result.timer[i-1]) / flat_counters[result.texts[i]]
+    (delay_sums, result, i) => delay_sums[result.texts[i]] += (result.timer[i]-result.timer[i-1]) / flat_counters[result.texts[i]]
   );
 
   // Maximum

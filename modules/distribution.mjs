@@ -11,13 +11,13 @@ export const distribution = ( title, plot_div, x_axis, raw_data, ccm ) => {
   x_axis.forEach( (max, i) => {
     raw_data.forEach( rec => {
       if ( ! y_axis[i] ) y_axis[i] = 0;
-      if ( rec.final_percentage < max && !(i > 0 && rec.final_percentage < x_axis[i-1]) ) y_axis[i] += 1;
+      if ( rec.final_percentage <= max && !(i > 0 && rec.final_percentage <= x_axis[i-1]) ) y_axis[i] += 1;
     });
   });
 
   const data = [
     {
-      "x": x_axis,
+      "x": x_axis.map(x => "bis zu " + x),
       "y": y_axis,
       "type": "bar"
     }

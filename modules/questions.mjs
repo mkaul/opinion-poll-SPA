@@ -12,7 +12,7 @@ export const questions = [
 
   // Manifest // http://agilemanifesto.org/iso/de/manifesto.html
   {agil: 'Individuen und Interaktionen', plan: 'Prozesse und Werkzeuge'},
-  {agil: 'Funktionierende Software', plan: 'umfassende Dokumentation'},
+  {agil: 'Funktionierende Software', plan: 'Umfassende Dokumentation'},
   {agil: 'Zusammenarbeit mit dem Kunden', plan: 'Vertragsverhandlung'},
   {agil: 'Reagieren auf Veränderung', plan: 'Befolgen eines Plans'},
 
@@ -23,8 +23,8 @@ export const questions = [
   {agil: "Zukunftsfähigkeit der Bildung", plan: "Bewahren klassischer Vorstellungen"},
 
   // https://digitaleneuordnung.de/blog/agiles-manifest-fuer-unternehmensentwicklung/
-  {agil: "Konkrete Leistung", plan: "Powerpoint"},
-  {agil: "(persönliche) Beziehung", plan: "wasserdichter Vertrag"},
+  {agil: "Konkrete Leistung mit Mehrwert", plan: "gute Präsentation mit Powerpoint"},
+  {agil: "(persönliche) Beziehung", plan: "Wasserdichter Vertrag"},
   {agil: "sich an neue Herausforderungen anpassen können", plan: "einen festen Plan haben"}
 
 ];
