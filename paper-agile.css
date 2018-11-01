@@ -17,8 +17,9 @@ body {
 }
 #welcome, #survey, #result {
     color: white;
-    font-size: x-large;
+    font-size: large;
     text-align: center;
+    margin-right: 0.5em;
 }
 button {
     background: none;
