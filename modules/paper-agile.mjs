@@ -14,7 +14,56 @@ import { histogram_categories } from "../modules/histogram_categories.mjs";
 import { delays } from "../modules/delays.mjs";
 import { delay_categories } from "../modules/delay_categories.mjs";
 
+// universal functions for getting div and span elements from HTML
+const div = (id) => {
+  return document.getElementById(id);
+};
+const span = (class_name) => {
+  return document.querySelectorAll('.' + class_name);
+};
+
 let individual_results; // results of this single survey
+let global_state;
+change_state('welcome');
+
+function change_state( newState ){
+  global_state = newState;
+  window.location = '#' + newState;
+  switch( newState ){
+    case 'welcome':
+      div("survey").style.display = 'none';
+      div("result").style.display = 'none';
+      div("paper").style.display = 'none';
+      div("welcome").style.animation = 'fadeIn 2s';
+      div("welcome").style.display = 'block';
+      break;
+    case 'survey':
+      div("welcome").style.display = 'none';
+      div("paper").style.display = 'none';
+      div("result").style.display = 'none';
+      div("survey").style.animation = 'fadeIn 2s';
+      div("survey").style.display = 'block';
+      start_survey();
+      break;
+    case 'result':
+      div("welcome").style.display = 'none';
+      div("survey").style.display = 'none';
+      div("paper").style.display = 'none';
+      div("result").style.animation = 'fadeIn 2s';
+      div("result").style.display = 'block';
+      draw_results(individual_results);
+      break;
+    case 'paper':
+      div("welcome").style.display = 'none';
+      div("survey").style.display = 'none';
+      div("result").style.display = 'none';
+      div("paper").style.animation = 'fadeIn 3s';
+      div("paper").style.display = 'block';
+      generate_paper();
+      break;
+    default: debugger;
+  }
+}
 
 // get elements from HTML
 const start_survey_button = document.getElementById("start");
@@ -24,20 +73,12 @@ const start_paper_button = document.getElementById("start_paper");
 // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
 start_survey_button.addEventListener('click', () => {
   start_survey_button.style.backgroundColor = 'red';
-  window.location = '#survey';
+  change_state('survey');
 });
 start_paper_button.addEventListener( 'click', () => {
   start_paper_button.style.backgroundColor = 'red';
-  window.location = '#paper';
+  change_state('paper');
 } );
-
-// universal functions for getting div and span elements from HTML
-const div = (id) => {
-  return document.getElementById(id);
-};
-const span = (class_name) => {
-  return document.querySelectorAll('.' + class_name);
-};
 
 // convert JavaScript question array into HTML list
 let questions_html = "<ol>";
@@ -55,42 +96,12 @@ div("questions").innerHTML = questions_html;
 
 // Use Location API for hash changes
 // https://developer.mozilla.org/en-US/docs/Web/API/Location
-window.onhashchange = function() {
+window.onhashchange = function( e ) {
   // in-page anchor
-  const anchor = document.querySelector( location.hash );
-
-  if (location.hash.length === 0){
-    div("survey").style.display = 'none';
-    div("result").style.display = 'none';
-    div("paper").style.display = 'none';
-    div("welcome").style.animation = 'fadeIn 2s';
-    div("welcome").style.display = 'block';
-  } else { // location.hash.length > 0
-    if (location.hash.endsWith('survey')) {
-      div("welcome").style.display = 'none';
-      div("paper").style.display = 'none';
-      div("result").style.display = 'none';
-      div("survey").style.animation = 'fadeIn 2s';
-      div("survey").style.display = 'block';
-      start_survey();
-    } else if (location.hash.endsWith('result')) {
-      div("welcome").style.display = 'none';
-      div("survey").style.display = 'none';
-      div("paper").style.display = 'none';
-      div("result").style.animation = 'fadeIn 2s';
-      div("result").style.display = 'block';
-      draw_results(individual_results);
-    } else if (location.hash.endsWith('paper')) {
-      div("welcome").style.display = 'none';
-      div("survey").style.display = 'none';
-      div("result").style.display = 'none';
-      div("paper").style.animation = 'fadeIn 3s';
-      div("paper").style.display = 'block';
-      generate_paper();
-    } else { // location.hash is an in-page anchor
-      anchor.style.backgroundColor = "rgb(255, 237, 186)";
-      anchor.style.transition = "all 3s linear";
-    }
+  const anchor = document.querySelector( 'a' + location.hash );
+  if ( anchor ){
+    anchor.style.backgroundColor = "rgb(255, 237, 186)";
+    anchor.style.transition = "all 3s linear";
   }
 };
 
@@ -104,7 +115,7 @@ function start_survey(){
       column: true
     },
     finishListener: (e) => {
-      window.location = '#paper';
+      change_state('paper');
     },
     onfinish: function( instance, results ){
       const self = instance;
@@ -157,7 +168,7 @@ function start_survey(){
 
       individual_results = Object.assign( {}, results ); // ccm.helper.clone( results );
 
-      window.location = '#result';
+      change_state('result');
     }
   });
 }
