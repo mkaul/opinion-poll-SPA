@@ -100,8 +100,8 @@ function start_survey(){
     root: div("ccm_poll"),
     choices: questions,
     randomize: {
-      row: false,
-      column: false
+      row: true,
+      column: true
     },
     finishListener: (e) => {
       window.location = '#paper';
@@ -142,7 +142,7 @@ function start_survey(){
         results.category_counters[ cat ] += 1;
       });
 
-      results.final_percentage = (100 * results.category_counters.agil / max);
+      results.final_percentage = (100 * results.category_counters.agil / max) || 0;
 
       // log results
       fetch(new Request('https://kaul.inf.h-brs.de/data/2018/prosem/log_post.php'), {
@@ -230,7 +230,7 @@ export async function generate_paper(){
     const category_counters = {};
     let sum_categories = 0;
     dataset.forEach( data => {
-      data.categories.forEach( category => {
+      data.categories.forEach( (category,i) => {
         if ( category === "0" ) return;
         if ( ! category_counters[category] ) category_counters[category] = 0;
         category_counters[category] += 1;
@@ -251,13 +251,14 @@ export async function generate_paper(){
    */
   function count( dataset ){
     const counters = [];
-    questions.forEach(() => {
-      counters.push({});
+    questions.forEach((pair) => {
+      const counter = {};
+      Object.keys(pair).forEach(choice => counter[choice]=0);
+      counters.push(counter);
     });
     dataset.forEach((data)=>{
       counters.forEach((counter, i)=>{
-        const key = data.texts[i+1].normalize('NFKD');
-        if ( ! counter[key] ) counter[key] = 0;
+        const key = data.categories[i+1]; // data.texts[i+1].normalize('NFKD');
         counter[key] += 1;
       });
     });
@@ -279,6 +280,7 @@ export async function generate_paper(){
 
   histogram(
     'Histogramm absolut <i>(n = ' + count_participants + ')</i>',
+    questions,
     dataset,
     counters,
     div("histogram_absolute")
@@ -286,6 +288,7 @@ export async function generate_paper(){
 
   histogram(
     'Histogramm in Prozent <i>(n = ' + count_participants + ')</i>',
+    questions,
     dataset,
     counters,
     div("histogram_relative"),
@@ -338,40 +341,45 @@ export async function generate_paper(){
   // Sum
   delays(
     'Summe aller Verzögerungen in Millisekunden (msec) <i>(n = ' + count_participants + ')</i>',
+    questions,
     dataset,
     counters,
     div("delay_sum"),
-    (delay_sums, result, i) => delay_sums[result.texts[i]] += (result.timer[i]-result.timer[i-1]) // sum
+    (delay_sums, result, i) =>
+      delay_sums[i][result.categories[i]] += (result.timer[i]-result.timer[i-1]) // sum
   );
 
   // Average
   delays(
     'Durchschnitt aller Verzögerungen in Millisekunden (msec) <i>(n = ' + count_participants + ')</i>',
+    questions,
     dataset,
     counters,
     div("delay_avg"),
-    (delay_sums, result, i) => delay_sums[result.texts[i]] += (result.timer[i]-result.timer[i-1]) / flat_counters[result.texts[i]]
+    (delay_sums, result, i) => delay_sums[i][result.categories[i]] += (result.timer[i]-result.timer[i-1]) / flat_counters[result.categories[i]]
   );
 
   // Maximum
   delays(
     'Maximum aller Verzögerungen in Millisekunden (msec) <i>(n = ' + count_participants + ')</i>',
+    questions,
     dataset,
     counters,
     div("delay_max"),
-    (delay_sums, result, i) => delay_sums[result.texts[i]] = Math.max( delay_sums[ result.texts[i] ], ( result.timer[i] - result.timer[i-1] ) )
+    (delay_sums, result, i) => delay_sums[i][result.categories[i]] = Math.max( delay_sums[i][ result.categories[i] ], ( result.timer[i] - result.timer[i-1] ) )
   );
 
   // Minimum
   delays(
     'Minimum aller Verzögerungen in Millisekunden (msec) <i>(n = ' + count_participants + ')</i>',
+    questions,
     dataset,
     counters,
     div("delay_min"),
     (delay_sums, result, i) => {
       // avoid 0 as minimum
-      if ( delay_sums[result.texts[i]] === 0 ) delay_sums[result.texts[i]] = result.timer[i] - result.timer[i-1];
-      delay_sums[result.texts[i]] = Math.min( delay_sums[ result.texts[i] ], ( result.timer[i] - result.timer[i-1] ) );
+      if ( delay_sums[i][result.categories[i]] === 0 ) delay_sums[i][result.categories[i]] = result.timer[i] - result.timer[i-1];
+      delay_sums[i][result.categories[i]] = Math.min( delay_sums[i][ result.categories[i] ], ( result.timer[i] - result.timer[i-1] ) );
     }
   );
 

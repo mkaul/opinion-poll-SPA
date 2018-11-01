@@ -5,9 +5,7 @@
  * @copyright The MIT License (MIT) mkaul2m on 20.10.18.
  */
 
-export const histogram = ( title, results, counters, plot_result, mapping ) => {
-
-  // console.log(  title, results, counters, plot_result, mapping  );
+export const histogram = ( title, questions, results, counters, plot_result, mapping = c => c ) => {
 
   const data = [];
   counters.forEach((counter, i)=>{
@@ -15,8 +13,12 @@ export const histogram = ( title, results, counters, plot_result, mapping ) => {
       name: 'Auswahl ' + (i+1),
       type: 'bar'
     };
-    group.x = Object.keys(counter);
-    group.y = Object.values(counter).map( mapping || ( c => c ) );
+    group.x = [];
+    group.y = [];
+    Object.keys( counter ).forEach( key => {
+      group.x.push( questions[i][key] );
+      group.y.push( mapping( counter[key] ) );
+    });
     data.push(group);
   });
 

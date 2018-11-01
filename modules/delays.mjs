@@ -5,29 +5,39 @@
  * @copyright The MIT License (MIT) mkaul2m on 20.10.18.
  */
 
-import { questions } from '../modules/questions.mjs';
+export const delays = ( title, questions, results, counters, plot_result, mapping ) => {
 
-export const delays = ( title, results, counters, plot_result, mapping ) => {
+  const delay_sums = [{"0":0}]; // Start Button
 
-  const delay_sums = {};
+  // one sum per question
+  questions.forEach( question => {
+    const sum = {};
+    Object.keys(question).forEach(key => {sum[key] = 0});
+    delay_sums.push( sum ) ;
+  });
+
   for (const result of results){
-    for (let i=0; i<result.texts.length;i++){
+    for (let i=0; i<result.categories.length;i++){
       if (i===0) continue;
-      if (!delay_sums[result.texts[i]]) delay_sums[result.texts[i]] = 0;
       // sum, average, min, max, std deviation, median
       mapping(delay_sums, result, i);
     }
   }
 
-  const data = questions.reduce((groups,answers,i)=>{
-    groups.push({
-      x: Object.values(answers),
-      y: Object.values(answers).map( answer => delay_sums[answer] ),
+  const data = [];
+  questions.forEach((question,i) => {
+    const group = {
       name: 'Auswahl ' + (i+1),
       type: 'bar'
+    };
+    group.x = [];
+    group.y = [];
+    Object.keys(question).forEach(key=>{
+      group.x.push( question[key] );
+      group.y.push( delay_sums[i+1][ key ] || 0 );
     });
-    return groups;
-  },[]);
+    data.push(group);
+  });
 
   // render chart
   ccm.start("https://ccmjs.github.io/mkaul-components/plotly/versions/ccm.plotly-1.0.0.js", {
